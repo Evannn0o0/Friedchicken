@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Memory Game</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            font-size: 20px;
+        }
+
+        header {
+            background-color: #6f4f1e; /* Brown color */
+            padding: 40px;
+            color: white;
+            text-align: center;
+            font-size: 50px; /* Larger header text */
+        }
+
+        .game-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 columns for a 10-grid game */
+            grid-template-rows: repeat(2, 1fr); /* 2 rows for a 10-grid game */
+            gap: 5px;
+            max-width: 900px;
+            width: 100%;
+            height: 100%;
+            max-height: 900px;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-cell {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 60px; /* Adjusted size for food emojis */
+            cursor: pointer;
+            background-color: #f1f1f1;
+            border: 2px solid #6f4f1e;
+            border-radius: 10px;
+        }
+
+        .game-cell:hover {
+            background-color: #ddd;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 40px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .popup h2 {
+            font-size: 40px;
+            color: #6f4f1e;
+        }
+
+        .popup button {
+            background-color: #6f4f1e;
+            color: white;
+            padding: 15px 30px;
+            font-size: 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .popup button:hover {
+            background-color: #5a3d1c;
+        }
+
+        .timer {
+            font-size: 30px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<header>Food Memory Game
+<br>
+ <a href="http://localhost:8158/thegames.html" style="color:grey;">Go Back</a>
+</header>
+
+<div class="game-container">
+    <div class="game-board">
+        <div class="game-cell" onclick="flipCard(0)"></div>
+        <div class="game-cell" onclick="flipCard(1)"></div>
+        <div class="game-cell" onclick="flipCard(2)"></div>
+        <div class="game-cell" onclick="flipCard(3)"></div>
+        <div class="game-cell" onclick="flipCard(4)"></div>
+        <div class="game-cell" onclick="flipCard(5)"></div>
+        <div class="game-cell" onclick="flipCard(6)"></div>
+        <div class="game-cell" onclick="flipCard(7)"></div>
+        <div class="game-cell" onclick="flipCard(8)"></div>
+        <div class="game-cell" onclick="flipCard(9)"></div>
+    </div>
+</div>
+
+<div class="timer">Time Left: <span id="timer">30</span> seconds</div>
+
+<script>
+    // List of unique food emojis (5 unique items, 2 pairs each)
+    const foodEmojis = ['🍔', '🍟', '🍕', '🍩', '🌮'];
+    let flippedCards = [];
+    let matchedCards = [];
+    let gameOver = false;
+    let timer = 30;
+    let timerInterval;
+    let shuffledFood;
+    let isFlipping = false; // Prevent multiple flips before match checking
+
+    // Shuffle the food emojis to randomize the board
+    function shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    // Generate the shuffled food items (2 pairs for each)
+    function initializeGame() {
+        shuffledFood = shuffleArray([...foodEmojis, ...foodEmojis]);
+        const cells = document.getElementsByClassName('game-cell');
+        // Reset the game board
+        for (let i = 0; i < cells.length; i++) {
+            cells[i].textContent = '';
+        }
+    }
+
+    // Flip a card and reveal the emoji
+    function flipCard(index) {
+        const cells = document.getElementsByClassName('game-cell');
+
+        // Prevent flipping if two cards are already flipped or game is over
+        if (isFlipping || cells[index].textContent !== '') return;
+
+        cells[index].textContent = shuffledFood[index];
+        flippedCards.push(index);
+
+        // Check if two cards are flipped
+        if (flippedCards.length === 2) {
+            isFlipping = true;  // Prevent further flipping until the match is checked
+            setTimeout(checkMatch, 1000); // Delay to allow the user to see the cards
+        }
+    }
+
+    // Check if the two flipped cards match
+    function checkMatch() {
+        const [firstIndex, secondIndex] = flippedCards;
+        const cells = document.getElementsByClassName('game-cell');
+
+        if (shuffledFood[firstIndex] === shuffledFood[secondIndex]) {
+            matchedCards.push(shuffledFood[firstIndex]);
+            // If all cards are matched
+            if (matchedCards.length === shuffledFood.length / 2) {
+                clearInterval(timerInterval); // Stop the timer when game is won
+                showPopup('You Win!', getRandomDiscount());
+            }
+        } else {
+            cells[firstIndex].textContent = '';
+            cells[secondIndex].textContent = '';
+        }
+
+        flippedCards = [];
+        isFlipping = false; // Allow flipping again
+    }
+
+    // Show a pop-up when the game is over
+    function showPopup(message, discount) {
+        const popup = document.createElement('div');
+        popup.className = 'popup';
+        popup.innerHTML = `
+            <h2>${message}</h2>
+            <p>You've won a ${discount}% discount!</p>
+            <button onclick="restartGame()">Restart Game</button>
+        `;
+        document.body.appendChild(popup);
+    }
+
+    // Generate a random discount
+    function getRandomDiscount() {
+        return Math.floor(Math.random() * 50) + 10; // Random discount between 10% and 50%
+    }
+
+    // Timer countdown function
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            if (timer > 0) {
+                timer--;
+                document.getElementById('timer').textContent = timer;
+            } else {
+                clearInterval(timerInterval);
+                if (matchedCards.length !== shuffledFood.length / 2) {
+                    showPopup('Time Up!', 0); // Show time up message
+                }
+            }
+        }, 1000);
+    }
+
+    // Restart the game
+    function restartGame() {
+        const popup = document.querySelector('.popup');
+        if (popup) popup.remove();
+
+        // Reset the game state
+        flippedCards = [];
+        matchedCards = [];
+        gameOver = false;
+        timer = 30;
+        document.getElementById('timer').textContent = timer;
+
+        // Reinitialize the game with a new shuffled layout
+        initializeGame();
+
+        // Start the timer again
+        startTimer();
+    }
+
+    // Start the timer and initialize the game
+    initializeGame();
+    startTimer();
+</script>
+
+</body>
+</html>

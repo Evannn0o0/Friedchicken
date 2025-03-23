@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Easy Food Flappy Bird</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+      background-color: #f4e1c1; /* Light brown */
+      color: #5c3d2e; /* Dark brown */
+    }
+    canvas {
+      background-color: #fff;
+      display: block;
+      margin: auto;
+      border: 5px solid #5c3d2e;
+    }
+    .button {
+      background-color: #5c3d2e;
+      color: white;
+      padding: 15px 30px;
+      font-size: 24px;
+      border: none;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    .button:hover {
+      background-color: #3d291e;
+    }
+    #startButton, #restartButton {
+      display: block;
+      margin: auto;
+    }
+    #restartButton {
+      display: none;
+    }
+    #discount {
+      display: none;
+      font-size: 36px;
+      color: green;
+      margin-top: 30px;
+    }
+    a {
+      font-size: 50px;
+      color: #5c3d2e;
+      text-decoration: none;
+      margin-top: 20px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="font-size: 30px;"></h1>
+  <button style="font-size:420px;" id="startButton" class="button">Start Game
+  </button>
+  <a s href="http://localhost:8158/thegames.html" style="color:grey;">Go Back</a>
+  <canvas id="gameCanvas" width="1280" height="720" style="display:none;"></canvas>
+  <div id="discount">🎉 You won a 100% discount! 🎉</div>
+  <button id="restartButton" class="button">Restart</button>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const startButton = document.getElementById("startButton");
+    const restartButton = document.getElementById("restartButton");
+    const discountMessage = document.getElementById("discount");
+
+    let burger, pipes, score, isGameOver, gameRunning;
+    const winScore = 5;
+
+    function initGame() {
+      // Reduced burger size from 80 to 60
+      burger = { x: 150, y: 360, size: 60, gravity: 0.28, velocity: 0 };
+      pipes = [];
+      score = 0;
+      isGameOver = false;
+      gameRunning = true;
+      discountMessage.style.display = "none";
+      restartButton.style.display = "none";
+      gameLoop();
+    }
+
+    function startGame() {
+      startButton.style.display = "none";
+      canvas.style.display = "block";
+      initGame();
+    }
+
+    function restartGame() {
+      initGame();
+    }
+
+    function jump() {
+      if (!isGameOver) {
+        // Lower jump impulse from -9.5 to -8 for a lower jump
+        burger.velocity = -8;
+      }
+    }
+
+    function generatePipe() {
+      let gap = 250;
+      let randomHeight = Math.floor(Math.random() * (canvas.height - gap - 100)) + 50;
+      pipes.push({ x: canvas.width, y: 0, width: 80, height: randomHeight });
+      pipes.push({ x: canvas.width, y: randomHeight + gap, width: 80, height: canvas.height - randomHeight - gap });
+    }
+
+    function update() {
+      if (!isGameOver) {
+        burger.velocity += burger.gravity;
+        burger.y += burger.velocity;
+
+        for (let i = 0; i < pipes.length; i++) {
+          pipes[i].x -= 2.5;
+
+          if (burger.x < pipes[i].x + pipes[i].width &&
+              burger.x + burger.size > pipes[i].x &&
+              burger.y < pipes[i].y + pipes[i].height &&
+              burger.y + burger.size > pipes[i].y) {
+            isGameOver = true;
+          }
+        }
+
+        if (burger.y + burger.size > canvas.height || burger.y < 0) {
+          isGameOver = true;
+        }
+
+        if (pipes.length > 0 && pipes[0].x + pipes[0].width < 0) {
+          pipes.shift();
+          pipes.shift();
+          score++;
+        }
+
+        if (score >= winScore) {
+          discountMessage.style.display = "block";
+          isGameOver = true;
+        }
+      }
+
+      if (isGameOver) {
+        restartButton.style.display = "block";
+        gameRunning = false;
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw burger with a font size equal to burger.size
+      ctx.font = burger.size + "px Arial";
+      ctx.fillText("🍔", burger.x, burger.y + burger.size);
+
+      ctx.fillStyle = "#5c3d2e";
+      for (let i = 0; i < pipes.length; i++) {
+        ctx.fillRect(pipes[i].x, pipes[i].y, pipes[i].width, pipes[i].height);
+      }
+
+      ctx.fillStyle = "#5c3d2e";
+      ctx.font = "36px Arial";
+      ctx.fillText("Score: " + score, 40, 80);
+
+      if (isGameOver && score < winScore) {
+        ctx.fillText("Game Over! Press Restart", 500, canvas.height / 2);
+      }
+    }
+
+    function gameLoop() {
+      update();
+      draw();
+      if (gameRunning) {
+        requestAnimationFrame(gameLoop);
+      }
+    }
+
+    document.addEventListener("keydown", jump);
+    document.addEventListener("click", jump);
+    startButton.addEventListener("click", startGame);
+    restartButton.addEventListener("click", restartGame);
+
+    setInterval(generatePipe, 3000);
+  </script>
+</body>
+</html>

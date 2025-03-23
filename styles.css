@@ -1,0 +1,126 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f1e4;
+    color: #5a3e2b;
+    font-size: 24px; /* Increased base font size for 4K */
+}
+
+/* Header */
+header {
+    background-color: #8b4513;
+    color: white;
+    text-align: center;
+    padding: 40px;
+    font-size: 48px; /* Larger header text */
+    font-weight: bold;
+}
+
+/* Container */
+.container {
+    width: 60%; /* Wider content for large screens */
+    max-width: 2200px; /* Prevents content from stretching too wide */
+    margin: 50px auto;
+    background: white;
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Headings */
+h2 {
+    color: #8b4513;
+    font-size: 36px; /* Bigger headings */
+}
+
+/* Food List */
+.food-list {
+    margin-top: 30px;
+    padding: 30px;
+    background: #fff3e6;
+    border-left: 8px solid #8b4513;
+    font-size: 28px;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 30px;
+    background-color: #8b4513;
+    color: white;
+    margin-top: 50px;
+    font-size: 28px;
+}
+
+/* Responsive Design */
+@media (max-width: 2560px) { /* For smaller screens like 1440p or 1080p */
+    body {
+        font-size: 20px;
+    }
+    header {
+        font-size: 36px;
+        padding: 30px;
+    }
+    .container {
+        width: 75%;
+        padding: 40px;
+    }
+    h2 {
+        font-size: 32px;
+    }
+    .food-list {
+        font-size: 24px;
+    }
+    footer {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 1440px) { /* For laptops and smaller desktops */
+    body {
+        font-size: 18px;
+    }
+    header {
+        font-size: 30px;
+        padding: 25px;
+    }
+    .container {
+        width: 85%;
+        padding: 30px;
+    }
+    h2 {
+        font-size: 28px;
+    }
+    .food-list {
+        font-size: 20px;
+    }
+    footer {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 768px) { /* For tablets and mobile */
+    body {
+        font-size: 16px;
+    }
+    header {
+        font-size: 24px;
+        padding: 20px;
+    }
+    .container {
+        width: 95%;
+        padding: 20px;
+    }
+    h2 {
+        font-size: 24px;
+    }
+    .food-list {
+        font-size: 18px;
+        padding: 15px;
+    }
+    footer {
+        font-size: 18px;
+    }
+}
