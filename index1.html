@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=5.0">
+    <title>Chavacano Food Order Shop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            font-size: 20px; /* Increased font size */
+        }
+
+        header {
+            background-color: #6f4f1e; /* Brown color */
+            padding: 20px;
+            color: white;
+            text-align: center;
+            font-size: 30px; /* Larger header text */
+        }
+
+        .container {
+            width: 60%; /* Wider content for large screens */
+            max-width: 2200px; /* Prevents content from stretching too wide */
+            margin: 50px auto;
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        #menu {
+            color: #5c3d2e;
+        }
+
+        /* Styling for the menu items and cart */
+        .menu-item {
+            background-color: white;
+            padding: 20px;
+            margin: 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 24px; /* Larger font size for menu items */
+        }
+
+        .menu-item img {
+            width: 100%; /* Image will be responsive */
+            max-width: 500px; /* Set a max-width for UHD display */
+            height: auto; /* Keep the aspect ratio intact */
+            border-radius: 5px;
+        }
+
+        .menu-item .info {
+            flex-grow: 1;
+            margin-left: 20px;
+            text-align: left;
+        }
+
+        .menu-item button {
+            background-color: #6f4f1e;
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 22px; /* Bigger button text */
+        }
+
+        .menu-item button:hover {
+            background-color: #5a3d1c;
+        }
+
+        #cart {
+            display: none;
+            background-color: white;
+            padding: 25px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #cart ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #cart ul li {
+            margin: 15px 0;
+        }
+
+        button#logoutButton {
+            background-color: #d9534f;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 22px;
+        }
+
+        button#logoutButton:hover {
+            background-color: #c9302c;
+        }
+
+        h4 {
+            font-size: 30px; /* Larger text for total */
+        }
+
+        #orderNowButton {
+            background-color: #6f4f1e;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 30px; /* Bigger text for 'Order Now' button */
+            display: block;
+            margin: 20px auto;
+        }
+
+        #orderNowButton:hover {
+            background-color: #5a3d1c;
+        }
+
+        #removeButton {
+            background-color: #d9534f;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 30px; /* Bigger text for remove button */
+            display: block;
+            margin: 20px auto;
+        }
+
+        #removeButton:hover {
+            background-color: #c9302c;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Chavacano Food Shop</h1>
+</header>
+
+<div class="container">
+    <!-- Menu -->
+    <div style="color:#5c3d2e;" id="menu">
+        <center>
+            <h3 style="font-size:100px;">Menu</h3>
+            <a href="http://localhost:8158/index.html" style="color:#5c3d2e; font-size: 50px;">Cuisine</a>
+            <br>
+            <a href="http://localhost:8158/thegames.html" style="color:#5c3d2e; font-size:50px;">Games</a>
+        </center>
+
+        <!-- Paella Chavacano -->
+        <div class="menu-item">
+            <img src="paella.png" alt="Paella Chavacano">
+            <div class="info">
+                <p><strong>Paella Chavacano</strong></p>
+                <p>Price: ₱250.00</p>
+            </div>
+            <button id="btnPaella" onclick="addToCart('Paella Chavacano', 250)">Add to Cart</button>
+        </div>
+
+        <!-- Tiyula Itum -->
+        <div class="menu-item">
+            <img src="tiyula.png" alt="Tiyula Itum">
+            <div class="info">
+                <p><strong>Tiyula Itum</strong></p>
+                <p>Price: ₱300.00</p>
+            </div>
+            <button id="btnTiyula" onclick="addToCart('Tiyula Itum', 300)">Add to Cart</button>
+        </div>
+
+        <!-- Estofao -->
+        <div class="menu-item">
+            <img src="estofao.png" alt="Estofao">
+            <div class="info">
+                <p><strong>Estofao</strong></p>
+                <p>Price: ₱220.00</p>
+            </div>
+            <button id="btnEstofao" onclick="addToCart('Estofao', 220)">Add to Cart</button>
+        </div>
+
+        <!-- Curacha -->
+        <div class="menu-item">
+            <img src="curacha.png" alt="Curacha">
+            <div class="info">
+                <p><strong>Curacha</strong></p>
+                <p>Price: ₱350.00</p>
+            </div>
+            <button id="btnCuracha" onclick="addToCart('Curacha', 350)">Add to Cart</button>
+        </div>
+
+        <!-- Kinilaw -->
+        <div class="menu-item">
+            <img src="kinilaw.png" alt="Kinilaw">
+            <div class="info">
+                <p><strong>Kinilaw</strong></p>
+                <p>Price: ₱180.00</p>
+            </div>
+            <button id="btnKinilaw" onclick="addToCart('Kinilaw', 180)">Add to Cart</button>
+        </div>
+
+        <!-- Chupa Kulo -->
+        <div class="menu-item">
+            <img src="chupa.png" alt="Chupa Kulo">
+            <div class="info">
+                <p><strong>Chupa Kulo</strong></p>
+                <p>Price: ₱150.00</p>
+            </div>
+            <button id="btnChupaKulo" onclick="addToCart('Chupa Kulo', 150)">Add to Cart</button>
+        </div>
+
+        <!-- Chikalang -->
+        <div class="menu-item">
+            <img src="chikalang.png" alt="Chikalang">
+            <div class="info">
+                <p><strong>Chikalang</strong></p>
+                <p>Price: ₱120.00</p>
+            </div>
+            <button id="btnChikalang" onclick="addToCart('Chikalang', 120)">Add to Cart</button>
+        </div>
+
+        <!-- Saging Prito -->
+        <div class="menu-item">
+            <img src="saging.png" alt="Saging Prito">
+            <div class="info">
+                <p><strong>Saging Prito</strong></p>
+                <p>Price: ₱80.00</p>
+            </div>
+            <button id="btnSaging" onclick="addToCart('Saging Prito', 80)">Add to Cart</button>
+        </div>
+
+        <!-- Tamal Chavacano -->
+        <div class="menu-item">
+            <img src="tamal.png" alt="Tamal Chavacano">
+            <div class="info">
+                <p><strong>Tamal Chavacano</strong></p>
+                <p>Price: ₱120.00</p>
+            </div>
+            <button id="btnTamal" onclick="addToCart('Tamal Chavacano', 120)">Add to Cart</button>
+        </div>
+
+        <!-- Lokot -->
+        <div class="menu-item">
+            <img src="lokot.png" alt="Lokot">
+            <div class="info">
+                <p><strong>Lokot</strong></p>
+                <p>Price: ₱60.00</p>
+            </div>
+            <button id="btnLokot" onclick="addToCart('Lokot', 60)">Add to Cart</button>
+        </div>
+
+        <!-- Knickerbocker -->
+        <div class="menu-item">
+            <img src="knickerbocker.png" alt="Knickerbocker">
+            <div class="info">
+                <p><strong>Knickerbocker</strong></p>
+                <p>Price: ₱100.00</p>
+            </div>
+            <button id="btnKnickerbocker" onclick="addToCart('Knickerbocker', 100)">Add to Cart</button>
+        </div>
+
+        <!-- Mais con Yelo -->
+        <div class="menu-item">
+            <img src="mais.png" alt="Mais con Yelo">
+            <div class="info">
+                <p><strong>Mais con Yelo</strong></p>
+                <p>Price: ₱100.00</p>
+            </div>
+            <button id="btnMais" onclick="addToCart('Mais con Yelo', 100)">Add to Cart</button>
+        </div>
+    </div>
+
+    <!-- Cart Section -->
+    <div id="cart">
+        <h3>Your Cart</h3>
+        <ul id="cartList"></ul>
+        <button id="removeButton" onclick="removeItem()">Remove</button>
+        <h4>Total: ₱<span id="totalAmount">0.00</span></h4>
+        <button id="orderNowButton" onclick="placeOrder()">Order Now</button>
+    </div>
+</div>
+
+<script>
+    let cart = [];
+    let totalAmount = 0;
+
+    function addToCart(item, price) {
+        cart.push({ item, price });
+        updateCart();
+    }
+
+    function removeItem() {
+        if (cart.length > 0) {
+            cart.pop(); // Remove the last item in the cart
+            updateCart();
+        }
+    }
+
+    function updateCart() {
+        const cartList = document.getElementById("cartList");
+        cartList.innerHTML = "";
+        totalAmount = 0;
+
+        cart.forEach(({ item, price }) => {
+            const li = document.createElement("li");
+            li.textContent = `${item} - ₱${price}`;
+            cartList.appendChild(li);
+            totalAmount += price;
+        });
+
+        document.getElementById("totalAmount").textContent = totalAmount.toFixed(2);
+
+        if (cart.length === 0) {
+            document.getElementById("cart").style.display = "none";
+        } else {
+            document.getElementById("cart").style.display = "block";
+        }
+    }
+
+    function placeOrder() {
+        let name = prompt("Please enter your name:");
+        let address = prompt("Please enter your address:");
+
+        if (name && address) {
+            cart = [];
+            updateCart();
+            alert(`Your order has been placed!\nName: ${name}\nAddress: ${address}`);
+        } else {
+            alert("Please provide both your name and address.");
+        }
+    }
+</script>
+
+</body>
+</html>
